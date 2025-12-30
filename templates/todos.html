@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Flask Todos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dark.css') }}">
+</head>
+<body>
+    <h1>Todo Liste</h1>
+    <form action="{{ url_for('add_todo') }}" method="post">
+        <input type="text" name="title" placeholder="Neue Aufgabe hinzufügen" required>
+        <button type="submit">Hinzufügen</button>
+    </form>
+
+    {% if todos %}
+    <p class="meta">{{ todos|length }} Aufgabe(n), {{ todos|selectattr('done')|list|length }} erledigt</p>
+    <ul>
+        {% for todo in todos %}
+        <li>
+            <span class="title {% if todo.done %}done{% endif %}">{{ todo.title }}</span>
+            <div class="actions">
+                <form action="{{ url_for('toggle_todo', todo_id=todo.id) }}" method="post">
+                    <button type="submit">{% if todo.done %}Reaktivieren{% else %}Erledigt{% endif %}</button>
+                </form>
+                <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
+                    <button type="submit">Löschen</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Keine Aufgaben vorhanden. Füge eine neue Aufgabe hinzu!</p>
+    {% endif %}
+</body>
+</html>
