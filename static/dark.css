@@ -193,7 +193,12 @@ li {
 
 .commentX {
     color: #538bda;
-    margin-left: auto
+    margin-left: auto;
+}
+.commentY {
+    color: #538bda;
+    margin-left: auto;
+    margin-top: 50px;
 }
 
 .comment p {

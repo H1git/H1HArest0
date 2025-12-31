@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flask Todos</title>
+    <title>H1 Todos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='dark.css') }}">
 </head>
 
@@ -95,24 +95,29 @@
             {% endfor %}
         </ul>
         {% endif %}
-        {% if done_todos %}
-        <div class="donetrue">
-            <h2>Erledigt</h2>
-            <ul>
-                {% for todo in done_todos %}
-                <li>
-                    <div class="todo-body">
-                        <div class="todo-main">
-                            <span class="title done">{{ todo.title }}</span>
-                            <!-- <span class="state state-{{ todo.state }}">{{ todo.state }}</span> -->
-                        </div>
-                        <!-- {% if todo.comment %}
+
+        <details class="commentY">
+            <summary>
+                <h2>Erledigtes</h2>
+            </summary>
+
+            {% if done_todos %}
+            <div class="donetrue">
+                <ul>
+                    {% for todo in done_todos %}
+                    <li>
+                        <div class="todo-body">
+                            <div class="todo-main">
+                                <span class="title done">{{ todo.title }}</span>
+                                <!-- <span class="state state-{{ todo.state }}">{{ todo.state }}</span> -->
+                            </div>
+                            <!-- {% if todo.comment %}
                         <details class="comment">
                             <summary class="eedit">Bemerkung</summary>
                             <p style="padding: 5px;">{{ todo.comment }}</p>
                         </details>
                         {% endif %} -->
-                        <!-- <details class="edit">
+                            <!-- <details class="edit">
                             <summary class="eedit">Bearbeiten</summary>
                             <form class="edit-form" action="{{ url_for('update_todo_html', todo_id=todo.id) }}"
                                 method="post">
@@ -128,21 +133,22 @@
                                 <button type="submit">Speichern</button>
                             </form>
                         </details> -->
-                    </div>
-                    <div class="actions">
-                        <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
-                            <input type="hidden" name="list" value="{{ list_id }}">
-                            <button class="xbutton" style="margin-right: 20px;" type="submit">Löschen</button>
-                        </form>
-                        <form action="{{ url_for('toggle_todo', todo_id=todo.id) }}" method="post">
-                            <input type="hidden" name="list" value="{{ list_id }}">
-                            <button class="xxbutton" type="submit">öffnen</button>
-                        </form>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+                        </div>
+                        <div class="actions">
+                            <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
+                                <input type="hidden" name="list" value="{{ list_id }}">
+                                <button class="xbutton" style="margin-right: 20px;" type="submit">Löschen</button>
+                            </form>
+                            <form action="{{ url_for('toggle_todo', todo_id=todo.id) }}" method="post">
+                                <input type="hidden" name="list" value="{{ list_id }}">
+                                <button class="xxbutton" type="submit">öffnen</button>
+                            </form>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </details>
     </div>
     {% endif %}
     {% else %}
