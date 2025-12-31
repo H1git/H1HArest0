@@ -1,0 +1,57 @@
+diff --git a/main.py b/main.py
+index 9594103830d63f7fb8496011c4647eeb70d36033..f93ef6fc4901af82219b3ee1ff5ad605ba589d12 100644
+--- a/main.py
++++ b/main.py
+@@ -146,38 +146,44 @@ def create_todo():
+ def update_todo(todo_id: int):
+     data = request.get_json(silent=True) or {}
+     done = data.get("done")
+
+     todo = _get_todo(todo_id)
+     if todo is None:
+         abort(404, description="Todo nicht gefunden")
+
+     if done is not None:
+         todo["done"] = bool(done)
+         _save_to_file()
+     return jsonify(todo)
+
+
+ @app.delete("/api/todos/<int:todo_id>")
+ def delete_todo_api(todo_id: int):
+     todo = _get_todo(todo_id)
+     if todo is None:
+         abort(404, description="Todo nicht gefunden")
+     todos.remove(todo)
+     _save_to_file()
+     return ("", 204)
+
+
+ # region Server starten:
+-if __name__ == "__main__":
+-    # SSL optional schaltbar: USE_SSL=0 für reines HTTP
+-    use_ssl = False
+-    ssl_ctx = ("certs/cert.pem", "certs/key.pem") if use_ssl else None
++if __name__ == "__main__":
++    # SSL optional schaltbar: USE_SSL=1 aktiviert HTTPS (falls Zertifikate vorhanden),
++    # jeder andere Wert oder fehlende Zertifikate führen zu HTTP.
++    use_ssl = os.environ.get("USE_SSL", "0").strip().lower() in {"1", "true", "yes"}
++    cert_path = Path("certs/cert.pem")
++    key_path = Path("certs/key.pem")
++    if use_ssl and cert_path.exists() and key_path.exists():
++        ssl_ctx = (cert_path, key_path)
++    else:
++        ssl_ctx = None
+
+     try:
+         port = 8063
+-        app.run(host="0.0.0.0", port=port, debug=True)
+-    except:
+-        port = 8064
+-        app.run(host="0.0.0.0", port=port, debug=True)
++        app.run(host="0.0.0.0", port=port, debug=True, ssl_context=ssl_ctx)
++    except:
++        port = 8064
++        app.run(host="0.0.0.0", port=port, debug=True, ssl_context=ssl_ctx)
+
+ # endregion

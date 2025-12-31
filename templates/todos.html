@@ -7,30 +7,81 @@
 </head>
 <body>
     <h1>Todo Liste</h1>
-    <form action="{{ url_for('add_todo') }}" method="post">
-        <input type="text" name="title" placeholder="Neue Aufgabe hinzufügen" required>
-        <button type="submit">Hinzufügen</button>
+    <form class="add-form" action="{{ url_for('add_todo') }}" method="post">
+        <input type="text" name="title" placeholder="Neue Aufgabe hinzufuegen" required>
+        <select name="state">
+            <option value="idle" selected>idle</option>
+            <option value="inwork">inwork</option>
+        </select>
+        <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
+        <button type="submit">Hinzufuegen</button>
     </form>
 
     {% if todos %}
-    <p class="meta">{{ todos|length }} Aufgabe(n), {{ todos|selectattr('done')|list|length }} erledigt</p>
+    {% set open_todos = todos|rejectattr('done')|list %}
+    {% set done_todos = todos|selectattr('done')|list %}
+    <p class="meta">{{ todos|length }} Aufgabe(n), {{ done_todos|length }} erledigt</p>
+    {% if open_todos %}
     <ul>
-        {% for todo in todos %}
+        {% for todo in open_todos %}
         <li>
-            <span class="title {% if todo.done %}done{% endif %}">{{ todo.title }}</span>
+            <div class="todo-body">
+                <div class="todo-main">
+                    <span class="title {% if todo.done %}done{% endif %}">{{ todo.title }}</span>
+                    <span class="state state-{{ todo.state }}">{{ todo.state }}</span>
+                </div>
+                {% if todo.comment %}
+                <details class="comment">
+                    <summary>Bemerkung</summary>
+                    <p>{{ todo.comment }}</p>
+                </details>
+                {% endif %}
+            </div>
             <div class="actions">
                 <form action="{{ url_for('toggle_todo', todo_id=todo.id) }}" method="post">
                     <button type="submit">{% if todo.done %}Reaktivieren{% else %}Erledigt{% endif %}</button>
                 </form>
                 <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
-                    <button type="submit">Löschen</button>
+                    <button type="submit">Loeschen</button>
                 </form>
             </div>
         </li>
         {% endfor %}
     </ul>
+    {% endif %}
+    {% if done_todos %}
+    <div class="donetrue">
+        <h2>Erledigt</h2>
+        <ul>
+            {% for todo in done_todos %}
+            <li>
+                <div class="todo-body">
+                    <div class="todo-main">
+                        <span class="title done">{{ todo.title }}</span>
+                        <span class="state state-{{ todo.state }}">{{ todo.state }}</span>
+                    </div>
+                    {% if todo.comment %}
+                    <details class="comment">
+                        <summary>Bemerkung</summary>
+                        <p>{{ todo.comment }}</p>
+                    </details>
+                    {% endif %}
+                </div>
+                <div class="actions">
+                    <form action="{{ url_for('toggle_todo', todo_id=todo.id) }}" method="post">
+                        <button type="submit">Reaktivieren</button>
+                    </form>
+                    <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
+                        <button type="submit">Loeschen</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
     {% else %}
-    <p>Keine Aufgaben vorhanden. Füge eine neue Aufgabe hinzu!</p>
+    <p>Keine Aufgaben vorhanden. Fuege eine neue Aufgabe hinzu!</p>
     {% endif %}
 </body>
 </html>

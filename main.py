@@ -1,8 +1,4 @@
-"""Einfache Flask-Todo-Anwendung mit HTML-Ansicht, JSON-API und Persistenz.
-
-Starten mit:
-    flask --app main run --debug
-"""
+"""Einfache Flask-Todo-Anwendung mit HTML-Ansicht, JSON-API und Persistenz."""
 
 from itertools import count
 import json
@@ -17,6 +13,8 @@ class Todo(TypedDict):
     id: int
     title: str
     done: bool
+    state: str
+    comment: str
 
 
 app = Flask(__name__)
@@ -24,6 +22,26 @@ app = Flask(__name__)
 _id_counter = count(1)
 todos: List[Todo] = []
 data_file: Path | None = None
+ALLOWED_STATES = {"idle", "inwork"}
+
+
+def _normalize_state(value: str) -> str:
+    normalized = value.strip().lower()
+    return normalized if normalized in ALLOWED_STATES else "idle"
+
+
+def _normalize_comment(value: str) -> str:
+    return value.strip()
+
+
+def _normalize_todo(raw: dict) -> Todo:
+    return Todo(
+        id=int(raw.get("id", 0)),
+        title=str(raw.get("title", "")).strip(),
+        done=bool(raw.get("done", False)),
+        state=_normalize_state(str(raw.get("state", "idle"))),
+        comment=_normalize_comment(str(raw.get("comment", ""))),
+    )
 
 
 def _load_from_file() -> None:
@@ -38,7 +56,11 @@ def _load_from_file() -> None:
         try:
             loaded = json.loads(data_file.read_text(encoding="utf-8"))
             if isinstance(loaded, list):
-                todos.extend(loaded)
+                todos.extend(
+                    _normalize_todo(todo)
+                    for todo in loaded
+                    if isinstance(todo, dict)
+                )
         except (OSError, json.JSONDecodeError):
             pass
 
@@ -101,8 +123,12 @@ def index():
 @app.post("/add")
 def add_todo():
     title = request.form.get("title", "").strip()
+    state = _normalize_state(request.form.get("state", "idle"))
+    comment = _normalize_comment(request.form.get("comment", ""))
     if title:
-        todos.append(Todo(id=_next_id(), title=title, done=False))
+        todos.append(
+            Todo(id=_next_id(), title=title, done=False, state=state, comment=comment)
+        )
         _save_to_file()
     return redirect(url_for("index"))
 
@@ -136,7 +162,9 @@ def create_todo():
     title = str(data.get("title", "")).strip()
     if not title:
         abort(400, description="title erforderlich")
-    todo = Todo(id=_next_id(), title=title, done=False)
+    state = _normalize_state(str(data.get("state", "idle")))
+    comment = _normalize_comment(str(data.get("comment", "")))
+    todo = Todo(id=_next_id(), title=title, done=False, state=state, comment=comment)
     todos.append(todo)
     _save_to_file()
     return jsonify(todo), 201
@@ -146,6 +174,8 @@ def create_todo():
 def update_todo(todo_id: int):
     data = request.get_json(silent=True) or {}
     done = data.get("done")
+    state = data.get("state")
+    comment = data.get("comment")
 
     todo = _get_todo(todo_id)
     if todo is None:
@@ -153,6 +183,11 @@ def update_todo(todo_id: int):
 
     if done is not None:
         todo["done"] = bool(done)
+    if state is not None:
+        todo["state"] = _normalize_state(str(state))
+    if comment is not None:
+        todo["comment"] = _normalize_comment(str(comment))
+    if done is not None or state is not None or comment is not None:
         _save_to_file()
     return jsonify(todo)
 
@@ -175,9 +210,9 @@ if __name__ == "__main__":
 
     try:
         port = 8063
-        app.run(host="0.0.0.0", port=port, debug=True)
+        app.run(host="0.0.0.0", port=port, debug=True, ssl_context=ssl_ctx)
     except:
         port = 8064
-        app.run(host="0.0.0.0", port=port, debug=True)
+        app.run(host="0.0.0.0", port=port, debug=True, ssl_context=ssl_ctx)
 
 # endregion

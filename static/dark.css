@@ -15,13 +15,16 @@ h1 {
     color: #cbd5e1;
 }
 
-form {
+.add-form {
     margin-top: 1rem;
     display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
-input[type="text"] {
+.add-form input[type="text"],
+.add-form select,
+.add-form textarea {
     flex: 1;
     padding: 0.55rem 0.65rem;
     background: #1e293b;
@@ -30,8 +33,19 @@ input[type="text"] {
     color: #e2e8f0;
 }
 
-input[type="text"]::placeholder {
+.add-form input[type="text"]::placeholder,
+.add-form textarea::placeholder {
     color: #94a3b8;
+}
+
+.add-form select {
+    flex: 0 0 120px;
+}
+
+.add-form textarea {
+    flex-basis: 100%;
+    min-height: 90px;
+    resize: vertical;
 }
 
 button {
@@ -71,9 +85,49 @@ li {
     border-bottom: 1px solid #1f2937;
 }
 
+.todo-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.todo-main {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .title.done {
     text-decoration: line-through;
     color: #64748b;
+}
+
+.state {
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    border: 1px solid #475569;
+    color: #cbd5e1;
+}
+
+.state-idle {
+    background: #1f2937;
+}
+
+.state-inwork {
+    background: #0f766e;
+    border-color: #0f766e;
+    color: #ecfeff;
+}
+
+.comment summary {
+    cursor: pointer;
+    color: #94a3b8;
+}
+
+.comment p {
+    margin: 0.35rem 0 0;
+    color: #cbd5e1;
 }
 
 .actions {
