@@ -1,12 +1,7 @@
-"""Einfache Flask-Todo-Anwendung mit HTML-Ansicht und JSON-API.
-
-Starten mit:
-    flask --app main run --debug
-"""
+"""Einfache Flask-Todo-Anwendung mit HTML-Ansicht und JSON-API."""
 
 from itertools import count
 from typing import List, TypedDict
-
 from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
 
 
@@ -108,5 +103,23 @@ def delete_todo_api(todo_id: int):
     return ("", 204)
 
 
+# region Server starten:
 if __name__ == "__main__":
-    app.run(debug=True)
+    # SSL optional schaltbar: USE_SSL=0 für reines HTTP
+    use_ssl = False
+    ssl_ctx = ("certs/cert.pem", "certs/key.pem") if use_ssl else None
+
+    try:
+        port = 8063
+        app.run(
+            host="0.0.0.0",
+            port=port,
+        )  # debug=True
+    except:
+        port = 8064
+        app.run(
+            host="0.0.0.0",
+            port=port,
+        )
+        # debug = (True)
+# endregion
