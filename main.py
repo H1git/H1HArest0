@@ -19,8 +19,8 @@ class Todo(TypedDict):
     done: bool
 
 
-# app = Flask(__name__)
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(__name__)
+# app = Flask(__name__, template_folder="templates", static_folder="static")
 
 _id_counter = count(1)
 todos: List[Todo] = []
@@ -51,7 +51,9 @@ def _save_to_file() -> None:
     if data_file is None:
         return
     data_file.parent.mkdir(parents=True, exist_ok=True)
-    data_file.write_text(json.dumps(todos, ensure_ascii=False, indent=2), encoding="utf-8")
+    data_file.write_text(
+        json.dumps(todos, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
 
 def set_data_file(path: Path) -> None:
@@ -62,7 +64,9 @@ def set_data_file(path: Path) -> None:
     _load_from_file()
 
 
-DEFAULT_DATA_FILE = Path(os.environ.get("TODO_DATA_FILE", Path(__file__).parent / "data" / "todos.json"))
+DEFAULT_DATA_FILE = Path(
+    os.environ.get("TODO_DATA_FILE", Path(__file__).parent / "data" / "todos.json")
+)
 set_data_file(DEFAULT_DATA_FILE)
 
 
@@ -92,7 +96,7 @@ def reset_state() -> None:
 
 @app.get("/")
 def index():
-    return render_template("todos.htm", todos=todos)
+    return render_template("todos.html", todos=todos)
 
 
 @app.post("/add")
@@ -164,5 +168,17 @@ def delete_todo_api(todo_id: int):
     return ("", 204)
 
 
+# region Server starten:
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8093, debug=True)
+    # SSL optional schaltbar: USE_SSL=0 für reines HTTP
+    use_ssl = False
+    ssl_ctx = ("certs/cert.pem", "certs/key.pem") if use_ssl else None
+
+    try:
+        port = 8063
+        app.run(host="0.0.0.0", port=port, debug=True)
+    except:
+        port = 8064
+        app.run(host="0.0.0.0", port=port, debug=True)
+
+# endregion
