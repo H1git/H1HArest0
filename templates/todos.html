@@ -21,25 +21,27 @@
             </select>
         </form>
 
-        <form class="add-form" action="{{ url_for('add_todo') }}" method="post">
-            <input type="hidden" name="list" value="{{ list_id }}">
-            <input type="text" name="title" placeholder="Neue Aufgabe hinzufügen" required>
-            <select class="statess" name="state">
-                <option value="Leerlauf" selected>Leerlauf</option>
-                <option value="in Arbeit">in Arbeit</option>
-                <option value="geplant">geplant</option>
-            </select>
+        <details class="commentX">
+            <summary>Hinzufügen</summary>
 
-            <!-- <textarea name="comment" placeholder="Bemerkung (optional)"></textarea> -->
-            <br><br>
-            <details class="commentX">
-                <summary>Bemerkung</summary>
-                <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
-            </details>
+            <form class="add-form" action="{{ url_for('add_todo') }}" method="post">
+                <input type="hidden" name="list" value="{{ list_id }}">
+                <input type="text" name="title" placeholder="Neue Aufgabe hinzufügen" required>
+                <select class="statess" name="state">
+                    <option value="Leerlauf" selected>Leerlauf</option>
+                    <option value="in Arbeit">in Arbeit</option>
+                    <option value="geplant">geplant</option>
+                </select>
 
-            <br><br>
-            <button style="margin-left: auto;" type="submit">Hinzufügen</button>
-        </form>
+                <!-- <textarea name="comment" placeholder="Bemerkung (optional)"></textarea> -->
+                <details class="commentX">
+                    <summary>Bemerkung</summary>
+                    <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
+                </details>
+
+                <button style="margin-left: auto;" type="submit">Hinzufügen</button>
+            </form>
+        </details>
 
         {% if todos %}
         {% set open_todos = todos|rejectattr('done')|list %}
@@ -67,8 +69,10 @@
                             <input type="hidden" name="list" value="{{ list_id }}">
                             <input type="text" name="title" value="{{ todo.title }}" required>
                             <select name="state">
-                                <option value="Leerlauf" {% if todo.state=="Leerlauf" %}selected{% endif %}>Leerlauf</option>
-                                <option value="in Arbeit" {% if todo.state=="in Arbeit" %}selected{% endif %}>in Arbeit</option>
+                                <option value="Leerlauf" {% if todo.state=="Leerlauf" %}selected{% endif %}>Leerlauf
+                                </option>
+                                <option value="in Arbeit" {% if todo.state=="in Arbeit" %}selected{% endif %}>in Arbeit
+                                </option>
                                 <option value="geplant">geplant</option>
                             </select>
                             <textarea name="comment" placeholder="Bemerkung (optional)">{{ todo.comment }}</textarea>
