@@ -15,7 +15,9 @@ h1 {
     color: #cbd5e1;
 }
 
-.add-form {
+.list-form,
+.add-form,
+.edit-form {
     margin-top: 1rem;
     display: flex;
     gap: 0.5rem;
@@ -24,7 +26,11 @@ h1 {
 
 .add-form input[type="text"],
 .add-form select,
-.add-form textarea {
+.add-form textarea,
+.edit-form input[type="text"],
+.edit-form select,
+.edit-form textarea,
+.list-form select {
     flex: 1;
     padding: 0.55rem 0.65rem;
     background: #1e293b;
@@ -34,11 +40,13 @@ h1 {
 }
 
 .add-form input[type="text"]::placeholder,
-.add-form textarea::placeholder {
+.add-form textarea::placeholder,
+.edit-form textarea::placeholder {
     color: #94a3b8;
 }
 
-.add-form select {
+.add-form select,
+.edit-form select {
     flex: 0 0 120px;
 }
 
@@ -46,6 +54,20 @@ h1 {
     flex-basis: 100%;
     min-height: 90px;
     resize: vertical;
+}
+
+.edit-form textarea {
+    flex-basis: 100%;
+    min-height: 70px;
+    resize: vertical;
+}
+
+.list-form {
+    align-items: center;
+}
+
+.list-form label {
+    color: #94a3b8;
 }
 
 button {
@@ -128,6 +150,15 @@ li {
 .comment p {
     margin: 0.35rem 0 0;
     color: #cbd5e1;
+}
+
+.edit summary {
+    cursor: pointer;
+    color: #cbd5e1;
+}
+
+.edit-form {
+    margin-top: 0.5rem;
 }
 
 .actions {

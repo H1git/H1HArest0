@@ -27,28 +27,31 @@ def teardown_function(_):
 
 def test_html_add_toggle_delete():
     client = main.app.test_client()
+    list_id = main._default_list_id()
 
     # neue Aufgabe hinzufügen
-    client.post("/add", data={"title": "Erste Aufgabe"})
-    response = client.get("/")
+    client.post("/add", data={"title": "Erste Aufgabe", "list": list_id})
+    response = client.get("/", query_string={"list": list_id})
     assert b"Erste Aufgabe" in response.data
 
     # Aufgabe als erledigt markieren
-    first_id = main.todos[0]["id"]
-    client.post(f"/toggle/{first_id}")
-    assert main.todos[0]["done"] is True
+    todos = main.get_list(list_id)
+    first_id = todos[0]["id"]
+    client.post(f"/toggle/{first_id}", data={"list": list_id})
+    assert todos[0]["done"] is True
 
     # Aufgabe löschen
-    client.post(f"/delete/{first_id}")
-    assert main.todos == []
+    client.post(f"/delete/{first_id}", data={"list": list_id})
+    assert main.get_list(list_id) == []
 
 
 def test_api_crud_flow():
     client = main.app.test_client()
+    list_id = main._default_list_id()
 
     # erstellen
     create_resp = client.post(
-        "/api/todos",
+        f"/api/todos?list={list_id}",
         data=json.dumps({"title": "API Aufgabe"}),
         content_type="application/json",
     )
@@ -57,13 +60,14 @@ def test_api_crud_flow():
     todo_id = created["id"]
 
     # auflisten
-    list_resp = client.get("/api/todos")
+    list_resp = client.get("/api/todos", query_string={"list": list_id})
     assert list_resp.status_code == 200
     assert len(list_resp.get_json()) == 1
 
     # aktualisieren
     patch_resp = client.patch(
         f"/api/todos/{todo_id}",
+        query_string={"list": list_id},
         data=json.dumps({"done": True}),
         content_type="application/json",
     )
@@ -71,6 +75,6 @@ def test_api_crud_flow():
     assert patch_resp.get_json()["done"] is True
 
     # löschen
-    delete_resp = client.delete(f"/api/todos/{todo_id}")
+    delete_resp = client.delete(f"/api/todos/{todo_id}", query_string={"list": list_id})
     assert delete_resp.status_code == 204
-    assert main.todos == []
+    assert main.get_list(list_id) == []
