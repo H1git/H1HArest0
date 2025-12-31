@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!-- statischer Test für Go live -->
+<html lang="de" class=" gdjgxobcl idc0_350"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Flask Todos</title>
+    <link rel="stylesheet" href="Flask%20Todos-Dateien/dark.css">
+    <link rel="stylesheet" href="/static/dark.css">
+</head>
+<body>
+    <h1>Meine ToDo's</h1>
+
+    <form class="list-form" action="/" method="get">
+        <label for="list">Liste</label>
+        <select id="list" name="list">
+
+            <option value="einkauf">Einkaufsliste</option>
+
+            <option value="my" selected="selected">Meine ToDo's</option>
+
+        </select>
+        <button type="submit">Wechseln</button>
+    </form>
+
+    <form class="add-form" action="/add" method="post">
+        <input type="hidden" name="list" value="my">
+        <input type="text" name="title" placeholder="Neue Aufgabe hinzufuegen" required="">
+        <select name="state">
+            <option value="idle" selected="selected">idle</option>
+            <option value="inwork">inwork</option>
+        </select>
+        <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
+        <button type="submit">Hinzufuegen</button>
+    </form>
+
+
+
+
+    <p class="meta">6 Aufgabe(n), 3 erledigt</p>
+
+    <ul>
+
+        <li>
+            <div class="todo-body">
+                <div class="todo-main">
+                    <span class="title ">tu was oder auch nicht</span>
+                    <span class="state state-inwork">inwork</span>
+                </div>
+
+                <details class="comment">
+                    <summary class="eedit">Bemerkung</summary>
+                    <p>Dein Problem</p>
+                </details>
+
+                <details class="edit">
+                    <summary class="eedit">Bearbeiten</summary>
+                    <form class="edit-form" action="/update/2" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <input type="text" name="title" value="tu was oder auch nicht" required="">
+                        <select name="state">
+                            <option value="idle">idle</option>
+                            <option value="inwork" selected="selected">inwork</option>
+                        </select>
+                        <textarea name="comment" placeholder="Bemerkung (optional)">Dein Problem</textarea>
+                        <button type="submit">Speichern</button>
+                    </form>
+                </details>
+            </div>
+            <div class="actions">
+                <form action="/toggle/2" method="post">
+                    <input type="hidden" name="list" value="my">
+                    <button type="submit">Erledigt</button>
+                </form>
+                <form action="/delete/2" method="post">
+                    <input type="hidden" name="list" value="my">
+                    <button type="submit">Löschen</button>
+                </form>
+            </div>
+        </li>
+
+        <li>
+            <div class="todo-body">
+                <div class="todo-main">
+                    <span class="title ">macht nix</span>
+                    <span class="state state-idle">idle</span>
+                </div>
+
+                <details class="edit">
+                    <summary class="eedit">Bearbeiten</summary>
+                    <form class="edit-form" action="/update/4" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <input type="text" name="title" value="macht nix" required="">
+                        <select name="state">
+                            <option value="idle" selected="selected">idle</option>
+                            <option value="inwork">inwork</option>
+                        </select>
+                        <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
+                        <button type="submit">Speichern</button>
+                    </form>
+                </details>
+            </div>
+            <div class="actions">
+                <form action="/toggle/4" method="post">
+                    <input type="hidden" name="list" value="my">
+                    <button class="xbutton" type="submit">Erledigt</button>
+                </form>
+                <form action="/delete/4" method="post">
+                    <input type="hidden" name="list" value="my">
+                    <button class="xbutton" type="submit">Löschen</button>
+                </form>
+            </div>
+        </li>
+
+        <li>
+            <div class="todo-body">
+                <div class="todo-main">
+                    <span class="title ">VIEL zu tun</span>
+                    <span class="state state-idle">idle</span>
+                </div>
+
+                <details class="edit">
+                    <summary class="eedit">Bearbeiten</summary>
+                    <form class="edit-form" action="/update/6" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <input type="text" name="title" value="VIEL zu tun" required="">
+                        <select name="state">
+                            <option value="idle" selected="selected">idle</option>
+                            <option value="inwork">inwork</option>
+                        </select>
+                        <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
+                        <button type="submit">Speichern</button>
+                    </form>
+                </details>
+            </div>
+            <div class="actions">
+                <form action="/toggle/6" method="post">
+                    <input type="hidden" name="list" value="my">
+                    <button type="submit">Erledigt</button>
+                </form>
+                <form action="/delete/6" method="post">
+                    <input type="hidden" name="list" value="my">
+                    <button type="submit">Löschen</button>
+                </form>
+            </div>
+        </li>
+
+    </ul>
+
+
+    <div class="donetrue">
+        <h2>Erledigt</h2>
+        <ul>
+
+            <li>
+                <div class="todo-body">
+                    <div class="todo-main">
+                        <span class="title done">mach was</span>
+                        <span class="state state-idle">idle</span>
+                    </div>
+
+                    <details class="comment">
+                        <summary class="eedit">Bemerkung</summary>
+                        <p>erstaunlich</p>
+                    </details>
+
+                    <details class="edit">
+                        <summary>Bearbeiten</summary>
+                        <form class="edit-form" action="/update/3" method="post">
+                            <input type="hidden" name="list" value="my">
+                            <input type="text" name="title" value="mach was" required="">
+                            <select name="state">
+                                <option value="idle" selected="selected">idle</option>
+                                <option value="inwork">inwork</option>
+                            </select>
+                            <textarea name="comment" placeholder="Bemerkung (optional)">erstaunlich</textarea>
+                            <button type="submit">Speichern</button>
+                        </form>
+                    </details>
+                </div>
+                <div class="actions">
+                    <form action="/toggle/3" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <button type="submit">Reaktivieren</button>
+                    </form>
+                    <form action="/delete/3" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <button type="submit">Löschen</button>
+                    </form>
+                </div>
+            </li>
+
+            <li>
+                <div class="todo-body">
+                    <div class="todo-main">
+                        <span class="title done">viel zu tun</span>
+                        <span class="state state-idle">idle</span>
+                    </div>
+
+                    <details class="edit">
+                        <summary>Bearbeiten</summary>
+                        <form class="edit-form" action="/update/1" method="post">
+                            <input type="hidden" name="list" value="my">
+                            <input type="text" name="title" value="viel zu tun" required="">
+                            <select name="state">
+                                <option value="idle" selected="selected">idle</option>
+                                <option value="inwork">inwork</option>
+                            </select>
+                            <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
+                            <button type="submit">Speichern</button>
+                        </form>
+                    </details>
+                </div>
+                <div class="actions">
+                    <form action="/toggle/1" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <button type="submit">Reaktivieren</button>
+                    </form>
+                    <form action="/delete/1" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <button type="submit">Löschen</button>
+                    </form>
+                </div>
+            </li>
+
+            <li>
+                <div class="todo-body">
+                    <div class="todo-main">
+                        <span class="title done">wer weiss</span>
+                        <span class="state state-idle">idle</span>
+                    </div>
+
+                    <details class="edit">
+                        <summary>Bearbeiten</summary>
+                        <form class="edit-form" action="/update/5" method="post">
+                            <input type="hidden" name="list" value="my">
+                            <input type="text" name="title" value="wer weiss" required="">
+                            <select name="state">
+                                <option value="idle" selected="selected">idle</option>
+                                <option value="inwork">inwork</option>
+                            </select>
+                            <textarea name="comment" placeholder="Bemerkung (optional)"></textarea>
+                            <button type="submit">Speichern</button>
+                        </form>
+                    </details>
+                </div>
+                <div class="actions">
+                    <form action="/toggle/5" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <button type="submit">Reaktivieren</button>
+                    </form>
+                    <form action="/delete/5" method="post">
+                        <input type="hidden" name="list" value="my">
+                        <button type="submit">Löschen</button>
+                    </form>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+
+
+
+</body></html>

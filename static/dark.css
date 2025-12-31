@@ -1,13 +1,42 @@
+.statess{
+    width: 20px;
+    color: #0f766e;
+}
+
+.eedit {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    color: #0f766e;
+}
+
+.xbutton {
+    width: 45px;
+    height: 20px;
+    font-size: 8px;
+    /* Verhindert, dass der Text umbricht oder abgeschnitten wird */
+    line-height: 1;
+    /* Entfernt Standard-Abstände des Browsers */
+    padding: 0;
+    /* Zentriert den Text präzise */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Verhindert Textumbruch bei zu langen Wörtern */
+    white-space: nowrap;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
-    margin: 2rem auto;
-    max-width: 720px;
+    padding: 15px;
+    margin: auto;
+    max-width: 900px;
     background: #0f172a;
     color: #e2e8f0;
+    /* border-style: solid; */
 }
 
 h1 {
@@ -15,7 +44,12 @@ h1 {
     color: #cbd5e1;
 }
 
-.list-form,
+.list-form{
+    /* padding-left: 80%; */
+    /* margin-left: 70%; */
+    /* width: 70px; */
+    /* border-style: solid; */
+}
 .add-form,
 .edit-form {
     margin-top: 1rem;
@@ -52,13 +86,13 @@ h1 {
 
 .add-form textarea {
     flex-basis: 100%;
-    min-height: 90px;
+    min-height: 50px;
     resize: vertical;
 }
 
 .edit-form textarea {
     flex-basis: 100%;
-    min-height: 70px;
+    min-height: 50px;
     resize: vertical;
 }
 
@@ -122,6 +156,13 @@ li {
 .title.done {
     text-decoration: line-through;
     color: #64748b;
+    background-color: transparent;
+}
+
+.title {
+    color: #f8f9fb;
+    background-color: #2d2d2d;
+    padding: 7px;
 }
 
 .state {
@@ -147,14 +188,21 @@ li {
     color: #94a3b8;
 }
 
+.commentX {
+    color: #538bda;
+    margin-left: auto
+}
+
 .comment p {
     margin: 0.35rem 0 0;
+    background-color: #464747;
     color: #cbd5e1;
+    padding: 8px;
 }
 
 .edit summary {
     cursor: pointer;
-    color: #cbd5e1;
+    color: #94a3b8;
 }
 
 .edit-form {
