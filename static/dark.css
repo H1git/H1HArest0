@@ -1,4 +1,4 @@
-.statess{
+.statess {
     width: 20px;
     color: #0f766e;
 }
@@ -44,12 +44,13 @@ h1 {
     color: #cbd5e1;
 }
 
-.list-form{
+.list-form {
     /* padding-left: 80%; */
     /* margin-left: 70%; */
     /* width: 70px; */
     /* border-style: solid; */
 }
+
 .add-form,
 .edit-form {
     margin-top: 1rem;
@@ -169,18 +170,20 @@ li {
     padding: 0.1rem 0.45rem;
     border-radius: 999px;
     font-size: 0.8rem;
-    border: 1px solid #475569;
-    color: #cbd5e1;
+    border: 1px solid #313a47;
+    color: #297878;
 }
 
-.state-idle {
-    background: #1f2937;
-}
 
-.state-inwork {
-    background: #0f766e;
-    border-color: #0f766e;
-    color: #ecfeff;
+.state-Leerlauf {
+    /* background: #312d2f; */
+    /* border-color: #0f766e; */
+    color: #936a85;
+}
+.state-geplant {
+    background: #2b1064;
+    /* border-color: #0f766e; */
+    color: #6a9386;
 }
 
 .comment summary {
@@ -212,4 +215,70 @@ li {
 .actions {
     display: flex;
     gap: 0.5rem;
+}
+
+@media (max-width: 720px) {
+    body {
+        padding: 12px;
+        margin: 0;
+        max-width: 100%;
+        background-color: #172943;
+    }
+
+    .add-form,
+    .edit-form,
+    .list-form {
+        gap: 0.35rem;
+    }
+
+    .add-form input[type="text"],
+    .add-form select,
+    .add-form textarea,
+    .edit-form input[type="text"],
+    .edit-form select,
+    .edit-form textarea,
+    .list-form select {
+        flex-basis: 100%;
+    }
+
+    li {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .title {
+        display: block;
+        width: 100%;
+    }
+
+
+    .xbutton {
+        width: 45px;
+        /* height: 20px; */
+        font-size: 8px;
+        /* Verhindert, dass der Text umbricht oder abgeschnitten wird */
+        line-height: 1;
+        /* Entfernt Standard-Abstände des Browsers */
+        padding: 0;
+        /* Zentriert den Text präzise */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        /* Verhindert Textumbruch bei zu langen Wörtern */
+        white-space: nowrap;
+    }
+
+    .eedit {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9px;
+        color: #0f766e;
+    }
+
+
 }

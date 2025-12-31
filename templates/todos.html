@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flask Todos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='dark.css') }}">
 </head>
@@ -24,8 +25,9 @@
             <input type="hidden" name="list" value="{{ list_id }}">
             <input type="text" name="title" placeholder="Neue Aufgabe hinzufügen" required>
             <select class="statess" name="state">
-                <option value="idle" selected>idle</option>
-                <option value="inwork">inwork</option>
+                <option value="Leerlauf" selected>Leerlauf</option>
+                <option value="in Arbeit">in Arbeit</option>
+                <option value="geplant">geplant</option>
             </select>
 
             <!-- <textarea name="comment" placeholder="Bemerkung (optional)"></textarea> -->
@@ -65,8 +67,9 @@
                             <input type="hidden" name="list" value="{{ list_id }}">
                             <input type="text" name="title" value="{{ todo.title }}" required>
                             <select name="state">
-                                <option value="idle" {% if todo.state=="idle" %}selected{% endif %}>idle</option>
-                                <option value="inwork" {% if todo.state=="inwork" %}selected{% endif %}>inwork</option>
+                                <option value="Leerlauf" {% if todo.state=="Leerlauf" %}selected{% endif %}>Leerlauf</option>
+                                <option value="in Arbeit" {% if todo.state=="in Arbeit" %}selected{% endif %}>in Arbeit</option>
+                                <option value="geplant">geplant</option>
                             </select>
                             <textarea name="comment" placeholder="Bemerkung (optional)">{{ todo.comment }}</textarea>
                             <button type="submit">Speichern</button>
@@ -97,30 +100,30 @@
                     <div class="todo-body">
                         <div class="todo-main">
                             <span class="title done">{{ todo.title }}</span>
-                            <span class="state state-{{ todo.state }}">{{ todo.state }}</span>
+                            <!-- <span class="state state-{{ todo.state }}">{{ todo.state }}</span> -->
                         </div>
-                        {% if todo.comment %}
+                        <!-- {% if todo.comment %}
                         <details class="comment">
                             <summary class="eedit">Bemerkung</summary>
                             <p style="padding: 5px;">{{ todo.comment }}</p>
                         </details>
-                        {% endif %}
-                        <details class="edit">
+                        {% endif %} -->
+                        <!-- <details class="edit">
                             <summary class="eedit">Bearbeiten</summary>
                             <form class="edit-form" action="{{ url_for('update_todo_html', todo_id=todo.id) }}"
                                 method="post">
                                 <input type="hidden" name="list" value="{{ list_id }}">
                                 <input type="text" name="title" value="{{ todo.title }}" required>
                                 <select name="state">
-                                    <option value="idle" {% if todo.state=="idle" %}selected{% endif %}>idle</option>
-                                    <option value="inwork" {% if todo.state=="inwork" %}selected{% endif %}>inwork
+                                    <option value="Leerlauf" {% if todo.state=="Leerlauf" %}selected{% endif %}>Leerlauf</option>
+                                    <option value="in Arbeit" {% if todo.state=="in Arbeit" %}selected{% endif %}>in Arbeit
                                     </option>
                                 </select>
                                 <textarea name="comment"
                                     placeholder="Bemerkung (optional)">{{ todo.comment }}</textarea>
                                 <button type="submit">Speichern</button>
                             </form>
-                        </details>
+                        </details> -->
                     </div>
                     <div class="actions">
                         <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="post">
@@ -129,7 +132,7 @@
                         </form>
                         <form action="{{ url_for('toggle_todo', todo_id=todo.id) }}" method="post">
                             <input type="hidden" name="list" value="{{ list_id }}">
-                            <button class="xbutton" type="submit">offen</button>
+                            <button class="xxbutton" type="submit">öffnen</button>
                         </form>
                     </div>
                 </li>

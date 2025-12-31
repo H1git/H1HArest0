@@ -23,7 +23,7 @@ _list_states: Dict[str, Dict[str, object]] = {}
 data_dir: Path = Path(__file__).parent / "data"
 legacy_data_file: Path | None = None
 CONFIG_FILE = Path(__file__).parent / "config.yaml"
-ALLOWED_STATES = {"idle", "inwork"}
+ALLOWED_STATES = {"leerlauf", "in arbeit", "geplant"}
 
 
 def _parse_simple_config(path: Path) -> Dict[str, Dict[str, str]]:
@@ -63,7 +63,13 @@ LISTS: Dict[str, str] = CONFIG.get("lists", {}) or {"default": "Todos"}
 
 def _normalize_state(value: str) -> str:
     normalized = value.strip().lower()
-    return normalized if normalized in ALLOWED_STATES else "idle"
+
+    if normalized in ALLOWED_STATES:
+        ret = value
+    else:
+        ret = "Leerlauf"
+    # ret = normalized if normalized in ALLOWED_STATES else "Leerlauf"
+    return ret
 
 
 def _normalize_comment(value: str) -> str:
@@ -75,7 +81,7 @@ def _normalize_todo(raw: dict) -> Todo:
         id=int(raw.get("id", 0)),
         title=str(raw.get("title", "")).strip(),
         done=bool(raw.get("done", False)),
-        state=_normalize_state(str(raw.get("state", "idle"))),
+        state=_normalize_state(str(raw.get("state", "Leerlauf"))),
         comment=_normalize_comment(str(raw.get("comment", ""))),
     )
 
@@ -115,9 +121,7 @@ def _load_from_file(list_id: str) -> None:
             loaded = json.loads(data_file.read_text(encoding="utf-8"))
             if isinstance(loaded, list):
                 todos.extend(
-                    _normalize_todo(todo)
-                    for todo in loaded
-                    if isinstance(todo, dict)
+                    _normalize_todo(todo) for todo in loaded if isinstance(todo, dict)
                 )
         except (OSError, json.JSONDecodeError):
             pass
@@ -209,7 +213,7 @@ def index():
 def add_todo():
     list_id = _resolve_list_id()
     title = request.form.get("title", "").strip()
-    state = _normalize_state(request.form.get("state", "idle"))
+    state = _normalize_state(request.form.get("state", "Leerlauf"))
     comment = _normalize_comment(request.form.get("comment", ""))
     if title:
         _get_list(list_id).append(
@@ -243,7 +247,7 @@ def update_todo_html(todo_id: int):
         title = request.form.get("title", "").strip()
         if title:
             todo["title"] = title
-        todo["state"] = _normalize_state(request.form.get("state", "idle"))
+        todo["state"] = _normalize_state(request.form.get("state", "Leerlauf"))
         todo["comment"] = _normalize_comment(request.form.get("comment", ""))
         _save_to_file(list_id)
     return redirect(url_for("index", list=list_id))
@@ -272,7 +276,7 @@ def create_todo():
     title = str(data.get("title", "")).strip()
     if not title:
         abort(400, description="title erforderlich")
-    state = _normalize_state(str(data.get("state", "idle")))
+    state = _normalize_state(str(data.get("state", "Leerlauf")))
     comment = _normalize_comment(str(data.get("comment", "")))
     todo = Todo(
         id=_next_id(list_id),
@@ -309,7 +313,12 @@ def update_todo(todo_id: int):
         todo["state"] = _normalize_state(str(state))
     if comment is not None:
         todo["comment"] = _normalize_comment(str(comment))
-    if title is not None or done is not None or state is not None or comment is not None:
+    if (
+        title is not None
+        or done is not None
+        or state is not None
+        or comment is not None
+    ):
         _save_to_file(list_id)
     return jsonify(todo)
 
