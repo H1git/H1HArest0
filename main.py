@@ -19,7 +19,8 @@ class Todo(TypedDict):
     done: bool
 
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
 
 _id_counter = count(1)
 todos: List[Todo] = []
