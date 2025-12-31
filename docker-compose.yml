@@ -1,0 +1,13 @@
+services:
+  h1todo:
+    build: .
+    image: h1todo:latest
+    container_name: h1todo
+    ports:
+      - "8047:8093"
+    restart: always
+    network_mode: bridge
+    volumes:
+      - /opt/h1todo/data:/app/data
+    environment:
+      - TZ=Europe/Berlin

@@ -1,11 +1,28 @@
 import json
+import tempfile
+from pathlib import Path
 
 import main
 
+_tmpdir = None
+
 
 def setup_function(_):
+    global _tmpdir
+    if _tmpdir:
+        _tmpdir.cleanup()
+    _tmpdir = tempfile.TemporaryDirectory()
+    data_file = Path(_tmpdir.name) / "todos.json"
+    main.set_data_file(data_file)
     main.reset_state()
     main.app.testing = True
+
+
+def teardown_function(_):
+    global _tmpdir
+    if _tmpdir:
+        _tmpdir.cleanup()
+        _tmpdir = None
 
 
 def test_html_add_toggle_delete():
